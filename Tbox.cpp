@@ -205,7 +205,10 @@ void Tbox::stop_recording()
     Serial.println("Stopping recording");
     digitalWrite(_REC_PIN, LOW);
     open_O2();
+    while(Serial.available()){Serial.read();} // Flush the serial
     Serial.println("======================");
+    delay(5000);
+
 }
 
 void Tbox::hering_breuer(uint n_reps, uint dur_ms, uint interstim_ms)
