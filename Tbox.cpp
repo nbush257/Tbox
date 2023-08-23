@@ -139,10 +139,12 @@ void Tbox::user_wait()
         Serial.read();
     } // FLush Serial need this to allow for another recording to be done
     delay(1000);
-    Serial.println("Enter any key to start protocol.");
+    playAlert();
+    Serial.println("Enter any key to continue.");
     while (!Serial.available())
     {
     }
+    Serial.println("Key received. Continuing");
 }
 
 void Tbox::probe_settle(float probe_settle_min)
