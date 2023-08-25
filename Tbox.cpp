@@ -130,6 +130,18 @@ void Tbox::open_N2()
     digitalWrite(_HO_PIN, LOW);
     digitalWrite(_N2_PIN, HIGH);
 }
+void Tbox::wait(float wait_min){
+    // Wait a specified amount of time in minutes. Wraps some serial readout monitoring. Also allows user to shortcut
+    uint t_start = millis();
+    float elapsed_target = wait_min * 1000 * 60;
+    while ((millis()-t_start)<elapsed_target){
+    
+    }
+
+
+
+}
+
 
 void Tbox::user_wait()
 {
@@ -147,20 +159,20 @@ void Tbox::user_wait()
     Serial.println("Key received. Continuing");
 }
 
-void Tbox::probe_settle(float probe_settle_min)
+void Tbox::probe_settle(float wait_min)
 {
     // Delay from experiment start to allow the probe to settle
     // This prevents drift. Typical time for settling is 10-15 minutes
 
     // TODO: add a control to shortcut the wait time.
-    Serial.print("Waiting for the probe to settle. Press (x) to skip: ");
-    Serial.print(probe_settle_min);
+    Serial.print("Waiting... Press (x) to skip: ");
+    Serial.print(wait_min);
     Serial.println("min");
-    uint probe_settle_ms = uint(probe_settle_min * 60 * 1000);
+    uint wait_ms = uint(wait_min * 60 * 1000);
     uint t_start_pause = millis();
     elapsedMillis updateTimer = 100000; // Make this large so we print right away
     bool alerted = false;
-    while ((millis() - t_start_pause) < probe_settle_ms)
+    while ((millis() - t_start_pause) < wait_ms)
     {
 
         // Manual shortcut of the settle time
@@ -170,7 +182,7 @@ void Tbox::probe_settle(float probe_settle_min)
 
             if (user_input == 'x')
             {
-                Serial.println("Stopping settle time early...");
+                Serial.println("Stopping wait early...");
                 break;
             }
         }
@@ -178,15 +190,15 @@ void Tbox::probe_settle(float probe_settle_min)
         // Update monitor every 30s
         if (updateTimer >= 30000)
         {
-            _printTimeRemaining(t_start_pause, probe_settle_ms);
+            _printTimeRemaining(t_start_pause, wait_ms);
             updateTimer = 0;
         }
-        if ((int(millis()) - int(t_start_pause) - int(probe_settle_ms)) > -30000)
+        if ((int(millis()) - int(t_start_pause) - int(wait_ms)) > -30000)
         {
             if (!alerted)
             {
                 playAlert();
-                _printTimeRemaining(t_start_pause, probe_settle_ms);
+                _printTimeRemaining(t_start_pause, wait_ms);
                 alerted = true;
                 updateTimer = 0;
             }

@@ -26,7 +26,7 @@ class Tbox
     void open_N2();
 
     void user_wait();
-    void probe_settle(float probe_settle_min);
+    void wait(float wait_min);
     void start_recording();
     void stop_recording();
     void hering_breuer(uint n_reps, uint dur_ms, uint interstim_ms);
