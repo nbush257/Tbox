@@ -130,17 +130,7 @@ void Tbox::open_N2()
     digitalWrite(_HO_PIN, LOW);
     digitalWrite(_N2_PIN, HIGH);
 }
-void Tbox::wait(float wait_min){
-    // Wait a specified amount of time in minutes. Wraps some serial readout monitoring. Also allows user to shortcut
-    uint t_start = millis();
-    float elapsed_target = wait_min * 1000 * 60;
-    while ((millis()-t_start)<elapsed_target){
-    
-    }
 
-
-
-}
 
 
 void Tbox::user_wait()
@@ -159,12 +149,11 @@ void Tbox::user_wait()
     Serial.println("Key received. Continuing");
 }
 
-void Tbox::probe_settle(float wait_min)
+void Tbox::wait(float wait_min)
 {
-    // Delay from experiment start to allow the probe to settle
-    // This prevents drift. Typical time for settling is 10-15 minutes
+    // Delay by a predetermined amount of time (in minutes)
+    // 
 
-    // TODO: add a control to shortcut the wait time.
     Serial.print("Waiting... Press (x) to skip: ");
     Serial.print(wait_min);
     Serial.println("min");
@@ -263,7 +252,7 @@ void Tbox::_printTimeRemaining(uint startTime, uint timeTarget)
     Serial.print(minutes);
     Serial.print(":");
     Serial.print(seconds);
-    Serial.println(" Remaining until rec start");
+    Serial.println(" Remaining ");
 }
 
 void Tbox::playAlert()
