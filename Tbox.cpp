@@ -142,9 +142,15 @@ void Tbox::user_wait()
     } // FLush Serial need this to allow for another recording to be done
     delay(1000);
     playAlert();
+    //TODO: Repeat request for user in every 60s
     Serial.println("Enter any key to continue.");
+    elapsedMillis t_since_notify =0;
     while (!Serial.available())
     {
+        if (t_since_notify>60000){
+            Serial.println("Enter any key to continue...");
+            t_since_notify=0;
+        }
     }
     Serial.println("Key received. Continuing");
 }
