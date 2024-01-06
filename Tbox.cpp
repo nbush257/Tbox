@@ -6,7 +6,7 @@ Tbox::Tbox()
 }
 void Tbox::begin()
 {
-    Serial.begin(9600);
+    // Serial.begin(115200);
 }
 
 void Tbox::attach_O2(int pin)
@@ -83,7 +83,7 @@ void Tbox::attachDefaults()
 
 void Tbox::open_O2()
 {
-    Serial.println("\tDelivering O2");
+    // Serial.println("\tDelivering O2");
     digitalWrite(_O2_PIN, HIGH);
     digitalWrite(_RA_PIN, LOW);
     digitalWrite(_HC_PIN, LOW);
@@ -93,7 +93,7 @@ void Tbox::open_O2()
 
 void Tbox::open_RA()
 {
-    Serial.println("\tDelivering Room air");
+    // Serial.println("\tDelivering Room air");
     digitalWrite(_O2_PIN, LOW);
     digitalWrite(_RA_PIN, HIGH);
     digitalWrite(_HC_PIN, LOW);
@@ -103,7 +103,7 @@ void Tbox::open_RA()
 
 void Tbox::open_HC()
 {
-    Serial.println("\tDelivering Hypercapnia");
+    // Serial.println("\tDelivering Hypercapnia");
     digitalWrite(_O2_PIN, LOW);
     digitalWrite(_RA_PIN, LOW);
     digitalWrite(_HC_PIN, HIGH);
@@ -113,7 +113,7 @@ void Tbox::open_HC()
 
 void Tbox::open_HO()
 {
-    Serial.println("\tDelivering Hypoxia");
+    // Serial.println("\tDelivering Hypoxia");
     digitalWrite(_O2_PIN, LOW);
     digitalWrite(_RA_PIN, LOW);
     digitalWrite(_HC_PIN, LOW);
@@ -123,7 +123,7 @@ void Tbox::open_HO()
 
 void Tbox::open_N2()
 {
-    Serial.println("\tDelivering Pure Nitrogen");
+    // Serial.println("\tDelivering Pure Nitrogen");
     digitalWrite(_O2_PIN, LOW);
     digitalWrite(_RA_PIN, LOW);
     digitalWrite(_HC_PIN, LOW);
@@ -136,23 +136,23 @@ void Tbox::open_N2()
 void Tbox::user_wait()
 {
     // Wait for user input in the serial monitor. Use this for control flow
-    while (Serial.available())
-    {
-        Serial.read();
-    } // FLush Serial need this to allow for another recording to be done
+    // while (Serial.available())
+    // {
+    //     Serial.read();
+    // } // FLush Serial need this to allow for another recording to be done
     delay(1000);
     playAlert();
     //TODO: Repeat request for user in every 60s
-    Serial.println("Enter any key to continue.");
-    elapsedMillis t_since_notify =0;
-    while (!Serial.available())
-    {
-        if (t_since_notify>60000){
-            Serial.println("Enter any key to continue...");
-            t_since_notify=0;
-        }
-    }
-    Serial.println("Key received. Continuing");
+    // Serial.println("Enter any key to continue.");
+    // elapsedMillis t_since_notify =0;
+    // while (!Serial.available())
+    // {
+    //     if (t_since_notify>60000){
+    //         Serial.println("Enter any key to continue...");
+    //         t_since_notify=0;
+    //     }
+    // }
+    // Serial.println("Key received. Continuing");
 }
 
 void Tbox::wait(float wait_min)
@@ -160,9 +160,9 @@ void Tbox::wait(float wait_min)
     // Delay by a predetermined amount of time (in minutes)
     // 
 
-    Serial.print("Waiting... Press (x) to skip: ");
-    Serial.print(wait_min);
-    Serial.println("min");
+    // Serial.print("Waiting... Press (x) to skip: ");
+    // Serial.print(wait_min);
+    // Serial.println("min");
     uint wait_ms = uint(wait_min * 60 * 1000);
     uint t_start_pause = millis();
     elapsedMillis updateTimer = 100000; // Make this large so we print right away
@@ -171,16 +171,16 @@ void Tbox::wait(float wait_min)
     {
 
         // Manual shortcut of the settle time
-        if (Serial.available())
-        {
-            char user_input = Serial.read();
+        // if (Serial.available())
+        // {
+        //     char user_input = Serial.read();
 
-            if (user_input == 'x')
-            {
-                Serial.println("Stopping wait early...");
-                break;
-            }
-        }
+        //     if (user_input == 'x')
+        //     {
+        //         Serial.println("Stopping wait early...");
+        //         break;
+        //     }
+        // }
 
         // Update monitor every 30s
         if (updateTimer >= 30000)
@@ -203,7 +203,7 @@ void Tbox::wait(float wait_min)
 
 void Tbox::start_recording()
 {
-    Serial.println("Starting Recording");
+    // Serial.println("Starting Recording");
     digitalWrite(_REC_PIN, HIGH);
 }
 
@@ -211,11 +211,11 @@ void Tbox::stop_recording()
 {
     // Stop the recording by setting the record pin to low and turn on O2
 
-    Serial.println("Stopping recording");
+    // Serial.println("Stopping recording");
     digitalWrite(_REC_PIN, LOW);
     open_O2();
-    while(Serial.available()){Serial.read();} // Flush the serial
-    Serial.println("======================");
+    // while(Serial.available()){Serial.read();} // Flush the serial
+    // Serial.println("======================");
     delay(5000);
 
 }
@@ -226,15 +226,15 @@ void Tbox::hering_breuer(uint n_reps, uint dur_ms, uint interstim_ms)
     // n_reps - number of HB repitions to do
     // dur_ms - duration to have the solenoid closed in milliseconds
     // interstim_ms - duration between stimulations in milliseconds
-    Serial.print("Running H.B. Duration: ");
-    Serial.print(dur_ms);
-    Serial.println(" ms.");
+    // Serial.print("Running H.B. Duration: ");
+    // Serial.print(dur_ms);
+    // Serial.println(" ms.");
     for (uint ii = 0; ii < n_reps; ii++)
     {
-        Serial.print("\tHB rep ");
-        Serial.print(ii + 1);
-        Serial.print(" of ");
-        Serial.println(n_reps);
+        // Serial.print("\tHB rep ");
+        // Serial.print(ii + 1);
+        // Serial.print(" of ");
+        // Serial.println(n_reps);
         digitalWrite(_CPAP_PIN, LOW);
         delay(dur_ms);
         digitalWrite(_CPAP_PIN, HIGH);
@@ -242,6 +242,14 @@ void Tbox::hering_breuer(uint n_reps, uint dur_ms, uint interstim_ms)
     }
 }
 
+void Tbox::hering_breuer_start(){
+    digitalWrite(_CPAP_PIN, LOW);
+}
+
+void Tbox::hering_breuer_stop(){
+    digitalWrite(_CPAP_PIN, HIGH);
+
+}
 void Tbox::_printTimeRemaining(uint startTime, uint timeTarget)
 {
     // Private function to print the time remaining in probe settle time
@@ -254,11 +262,11 @@ void Tbox::_printTimeRemaining(uint startTime, uint timeTarget)
     seconds %= 60;
     minutes %= 60;
 
-    Serial.print("\r");
-    Serial.print(minutes);
-    Serial.print(":");
-    Serial.print(seconds);
-    Serial.println(" Remaining ");
+    // Serial.print("\r");
+    // Serial.print(minutes);
+    // Serial.print(":");
+    // Serial.print(seconds);
+    // Serial.println(" Remaining ");
 }
 
 void Tbox::playAlert()
@@ -267,15 +275,22 @@ void Tbox::playAlert()
     tone(_TONE_PIN, 1000, 500);
 }
 
+void Tbox::playTone(uint freq, uint duration)
+{
+    // Play a tone to alert the user
+    tone(_TONE_PIN, freq, duration);
+}
+
+
 void Tbox::syncUSV()
 {
     // Play a sequence of tones that can be used to synchronize the audio recording with the ephys
-    Serial.print("Running Audio Tone Synchronizer...");
+    // Serial.print("Running Audio Tone Synchronizer...");
     tone(_TONE_PIN, 1000, 100);
     delay(350);
     tone(_TONE_PIN, 2000, 100);
     delay(350);
     tone(_TONE_PIN, 5000, 500);
     delay(750);
-    Serial.println("Sync tone finished");
+    // Serial.println("Sync tone finished");
 }

@@ -30,12 +30,16 @@ class Tbox
     void start_recording();
     void stop_recording();
     void hering_breuer(uint n_reps, uint dur_ms, uint interstim_ms);
+    void hering_breuer_start();
+    void hering_breuer_stop();
     void playAlert();
+    void playTone(uint freq, uint duration);
     void syncUSV();
 
     int DAC_RESOLUTION=12;
     float DAC_RANGE=pow(2.0,float(DAC_RESOLUTION))-1;
     float V_REF=3.3;
+
   private:
     int _O2_PIN; 
     int _RA_PIN; 
@@ -45,6 +49,7 @@ class Tbox
     int _N2_PIN;
     int _TONE_PIN;
     int _REC_PIN;
+    bool _USE_SERIAL;
     
     int _O2_PIN_DEFAULT=0; 
     int _RA_PIN_DEFAULT=1; 
